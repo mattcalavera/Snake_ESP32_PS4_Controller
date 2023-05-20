@@ -13,6 +13,7 @@ typedef enum {
   RIGHT,
   DOWN
 } Direction;
+
 typedef enum {
   START,
   RUNNING,
@@ -26,7 +27,10 @@ State gameState;
 #define MAP_SIZE_X          40
 #define MAP_SIZE_Y          20
 #define STARTING_SNAKE_SIZE  5
+
+//you can change snake speed with R1 and L1 (I plan to insert a sort of debounce for that keys)
 int SNAKE_MOVE_DELAY = 25;
+
 int8_t snake[MAX_SANKE_LENGTH][2];
 uint8_t snake_length;
 Direction dir;
@@ -34,16 +38,13 @@ Direction newDir;
 
 int8_t fruit[2];
 
-
 int r = 0;
 int g = 255;
 int b = 0;
 
-
-
 void setup() {
   Serial.begin(115200);
-  PS4.begin("A0:78:17:F2:2C:3F");
+  PS4.begin("00:00:00:00:00:00");   //<--- insert here BT MAC Address of the device to connect (see : https://github.com/aed3/PS4-esp32#pairing-the-ps4-controller)
   Serial.println("Ready....");
 
   Heltec.begin(true /*DisplayEnable Enable*/, false /*LoRa Disable*/, true /*Serial Enable*/);
@@ -60,7 +61,6 @@ void setup() {
   setupGame();
 }
 
-
 void resetSnake() {
   snake_length = STARTING_SNAKE_SIZE;
   for (int i = 0; i < snake_length; i++) {
@@ -68,7 +68,6 @@ void resetSnake() {
     snake[i][1] = MAP_SIZE_Y / 2;
   }
 }
-
 
 void setupGame() {
   gameState = START;
@@ -132,8 +131,6 @@ void loop() {
   delay(10);
 }
 
-
-//DA SISTEMARE
 bool buttonPress() {
   if (PS4.Right()) {
     return true;
@@ -166,8 +163,6 @@ void readDirection() {
   }
 }
 
-//SOPRA SISTEMARE
-
 bool moveSnake() {
   int8_t x = snake[0][0];
   int8_t y = snake[0][1];
@@ -189,7 +184,6 @@ bool moveSnake() {
 
   if (collisionCheck(x, y))
     return true;
-
   for (int i = snake_length - 1; i > 0; i--) {
     snake[i][0] = snake[i - 1][0];
     snake[i][1] = snake[i - 1][1];
@@ -235,7 +229,6 @@ bool collisionCheck(int8_t x, int8_t y) {
 void drawMap() {
   int offsetMapX = SCREEN_WIDTH - SNAKE_PIECE_SIZE * MAP_SIZE_X - 2;
   int offsetMapY = 2;
-
   Heltec.display->drawRect(fruit[0] * SNAKE_PIECE_SIZE + offsetMapX, fruit[1] * SNAKE_PIECE_SIZE + offsetMapY, SNAKE_PIECE_SIZE, SNAKE_PIECE_SIZE);
   Heltec.display->drawRect(offsetMapX - 2, 0, SNAKE_PIECE_SIZE * MAP_SIZE_X + 4, SNAKE_PIECE_SIZE * MAP_SIZE_Y + 4);
   for (int i = 0; i < snake_length; i++) {
