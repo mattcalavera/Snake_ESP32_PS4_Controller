@@ -87,6 +87,14 @@ void setupGame() {
   }
   drawMap();
   drawScore();
+  PS4.setLed(0, 255, 0);
+  PS4.sendToController();
+  delay(10);
+  PS4.setRumble(125, 0);
+  PS4.sendToController();
+  delay(250);
+  PS4.setRumble(0, 0);
+  PS4.sendToController();
   //drawPressToStart();
 }
 
@@ -199,6 +207,7 @@ void checkFruit() {
   {
     if (snake_length + 1 <= MAX_SANKE_LENGTH)
       snake_length++;
+    //Small rumble?
     generateFruit();
   }
 }
@@ -227,6 +236,8 @@ bool collisionCheck(int8_t x, int8_t y) {
 }
 
 void drawMap() {
+  PS4.setLed(0, 255, 0);
+  PS4.sendToController();
   int offsetMapX = SCREEN_WIDTH - SNAKE_PIECE_SIZE * MAP_SIZE_X - 2;
   int offsetMapY = 2;
   Heltec.display->drawRect(fruit[0] * SNAKE_PIECE_SIZE + offsetMapX, fruit[1] * SNAKE_PIECE_SIZE + offsetMapY, SNAKE_PIECE_SIZE, SNAKE_PIECE_SIZE);
@@ -237,6 +248,18 @@ void drawMap() {
 }
 
 void drawGameover() {
+  PS4.setLed(255, 0, 0);
+  PS4.setRumble(0, 200);
+  PS4.sendToController();
+  delay(150);
+  PS4.setRumble(0, 0);
+  PS4.sendToController();
+  delay(150);
+  PS4.setRumble(0, 200);
+  PS4.sendToController();
+  delay(150);
+  PS4.setRumble(0, 0);
+  PS4.sendToController();
   Heltec.display->drawXbm(MAP_SIZE_X / 2 + 5, MAP_SIZE_Y / 2, gameover_width, gameover_height,  gameover_bits);
   Heltec.display->display();
   delay(500);
