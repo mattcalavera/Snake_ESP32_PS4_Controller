@@ -1,4 +1,4 @@
-# Snake_ESP32_PS4_Controller
+# Snake Game ESP32 PS4 Controller
 (re)porting of snake on ESP32 (Heltec wifi lora) controlled by PS4 dualshock via bluetooth
 
 Library to connect PS4 Controller via bluetooth from : https://github.com/aed3/PS4-esp32
